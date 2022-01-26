@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
-import PetItem from './PetItem';
-import { observer } from 'mobx-react';
-import petStore from '../petStore';
+import React, { useState } from "react";
+import PetItem from "./PetItem";
+import { observer } from "mobx-react";
+import petStore from "../petStore";
+import { Button } from "react-bootstrap";
+import PetCreateModal from "../Components/PetCreateModal";
+
 function PetsList() {
-  const [query, setQuery] = useState('');
-  const [type, setType] = useState('');
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("");
+  const [isFormShown, setIsFormShown] = useState(false);
+
+  const handleShow = () => {
+    setIsFormShown(true);
+  };
+
+  const handleClose = () => {
+    setIsFormShown(false);
+  };
+
   const pets = petStore.pets
     .filter(
       (pet) =>
@@ -12,12 +25,17 @@ function PetsList() {
         pet.type.includes(type)
     )
     .map((pet) => <PetItem key={pet.id} pet={pet} />);
+
   return (
     <section id="doctors" class="doctor-section pt-140">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xxl-5 col-xl-6 col-lg-7">
             <div class="section-title text-center mb-30">
+              <PetCreateModal
+                isFormShown={isFormShown}
+                handleClose={handleClose}
+              />
               <h1 class="mb-25 wow fadeInUp" data-wow-delay=".2s">
                 Fur-ends
               </h1>
@@ -46,6 +64,9 @@ function PetsList() {
                 <option value="Rabbit">Rabbit</option>
               </select>
             </div>
+            <Button variant="info" onClick={handleShow}>
+              Add Pet
+            </Button>
           </div>
         </div>
 
